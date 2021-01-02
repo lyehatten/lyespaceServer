@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Profile = require('../db').import('../models/profile');
 const validateSession = require('../middleware/validateSession')
+const validateBandmate = require('../middleware/validateBandmate');
 
 
 router.post('/create', validateSession, function(req, res){
@@ -26,10 +27,6 @@ router.post('/create', validateSession, function(req, res){
     .catch((err) => res.status(500).json({ error: err }));
 })
 
-router.delete('/remove/:id', function(req, res){
-  res.send('remove user')
-})
-
 
 router.put('/update', validateSession, function(req, res){
   Profile.update({
@@ -47,13 +44,20 @@ router.put('/update', validateSession, function(req, res){
     youtube: req.body.youtube,
     youtubeExamples: req.body.youtubeExamples,
     soundcloud: req.body.soundcloud,
-    soundcloudExamples: req.body.soundcloudExamples,
-    userId: req.user.id
+    soundcloudExamples: req.body.soundcloudExamples
   },
   {where: {userId: req.user.id}})
   .then(() => res.status(200).json({message: "user Profile updated"}))
     .catch((err) => res.status(500).json({ error: err }));
 })
 
+router.put('/adminRemove/:id', validateBandmate, function(req, res){
+  Profile.update({
+    bio: "Profile has been removed by Admin."
+  },
+  {where: {userId: req.params.id}})
+  .then(() => res.status(200).json({message: "User Profile removed"}))
+    .catch((err) => res.status(500).json({ error: err }));
+})
 
 module.exports = router;

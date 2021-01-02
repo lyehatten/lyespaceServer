@@ -1,14 +1,8 @@
 const router = require('express').Router();
 const Comments = require('../db').import('../models/comments');
+const validateBandmate = require('../middleware/validateBandmate');
 const validateSession = require('../middleware/validateSession')
 
-router.get('/:mainPostId', function(req, res){
-  res.send('gets all comments for a post');
-})
-
-router.put('/edit/:id', function(req, res){
-  res.send('edits a comment by id ')
-})
 
 router.post('/create', validateSession, function(req, res){
   Comments.create({
@@ -20,8 +14,38 @@ router.post('/create', validateSession, function(req, res){
   .catch((err) => res.status(500).json({ error: err }));
 })
 
-router.delete('/delete/:id', function(req,res){
-  res.send('deletes a comment ')
+router.get('/allComments/:postId', function(req, res){
+  Comments.findAll({
+    where: {postId: req.params.postId}
+  })
+  .then((data) => res.status(200).json(data))
+  .catch((err) => res.status(500).json({ error: err }));
+})
+
+router.put('/edit/:id', validateSession, function(req, res){
+  Comments.update(
+    {comment: req.body.comment},
+    {where: {id: req.params.id, userId: req.user.id}}
+  )
+  .then(() => res.status(200).json({message: "comment edited!"}))
+  .catch((err) => res.status(500).json({ error: err }));
+})
+
+router.delete('/delete/:id', validateSession, function(req,res){
+  Comments.destroy({
+    where: {id: req.params.id, userId: req.user.id}
+  })
+  .then(() => res.status(200).json({message: "comment deleted!"}))
+  .catch((err) => res.status(500).json({ error: err }));
+})
+
+router.put('/adminRemove/:id', validateBandmate, function(req,res){
+  Comments.update(
+    {comment: "Admin has removed comment."},
+    {where: {id: req.params.id}}
+  )
+  .then(() => res.status(200).json({message: "comment updated!"}))
+  .catch((err) => res.status(500).json({ error: err }));
 })
 
 module.exports = router;

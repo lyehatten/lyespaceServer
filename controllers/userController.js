@@ -7,23 +7,6 @@ const validateSession = require('../middleware/validateSession')
 const validateBandmate = require('../middleware/validateBandmate')
 const validateBigBoss = require('../middleware/validateBigBoss')
 
-router.get('/userInfo/:id',  function(req, res){
-  User.findOne({
-    where: { id: req.params.id},
-    include: ['profile', 'posts']
-})
-.then(data => res.status(200).json(data))
-.catch(err => res.status(500).json({ error: err }))
-})
-
-router.get('/findAll', (req, res) => {
-  User.findAll({
-    include: 'profile'
-  })
-  .then(data => res.status(200).json(data))
-  .catch(err => res.status(500).json({ error: err }))
-})
-
 router.post('/register', function(req, res){
   User.create ({
     email: req.body.email,
@@ -43,6 +26,23 @@ router.post('/register', function(req, res){
       }
   )
   .catch(err => res.status(500).json({error: err}))
+})
+
+router.get('/userInfo/:id',  function(req, res){
+  User.findOne({
+    where: { id: req.params.id},
+    include: ['profile']
+})
+.then(data => res.status(200).json(data))
+.catch(err => res.status(500).json({ error: err }))
+})
+
+router.get('/findAll', (req, res) => {
+  User.findAll({
+    include: 'profile'
+  })
+  .then(data => res.status(200).json(data))
+  .catch(err => res.status(500).json({ error: err }))
 })
 
 router.post('/login', function(req, res){
@@ -97,7 +97,17 @@ router.put('/role/:id', validateBigBoss, function(req, res){
 });
 
 router.put('/update', validateSession, function(req, res){
-  res.send('update user profile ')
+  User.update(
+    {
+      email: req.body.email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName
+    },
+    {where: {id: req.user.id}}
+  )
+  .then(() => res.status(200).json({message: "updated info!"}))
+  .catch((err) => res.status(500).json({ error: err}));
+  
 })
 
 
