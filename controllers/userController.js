@@ -31,7 +31,7 @@ router.post('/register', function(req, res){
 router.get('/userInfo/:id',  function(req, res){
   User.findOne({
     where: { id: req.params.id},
-    include: ['profile']
+    include: ['profile', 'posts']
 })
 .then(data => res.status(200).json(data))
 .catch(err => res.status(500).json({ error: err }))
