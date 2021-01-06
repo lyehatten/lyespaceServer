@@ -16,7 +16,8 @@ router.post('/create', validateSession, function(req, res){
 
 router.get('/allComments/:postId', function(req, res){
   Comments.findAll({
-    where: {postId: req.params.postId}
+    where: {postId: req.params.postId},
+    include: 'user'
   })
   .then((data) => res.status(200).json(data))
   .catch((err) => res.status(500).json({ error: err }));
