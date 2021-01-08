@@ -14,13 +14,10 @@ router.post('/create', validateSession, function(req, res){
     instagram: req.body.instagram,
     facebook: req.body.facebook,
     bandcamp: req.body.bandcamp,
-    bandcampExamples: req.body.bandcampExamples,
     spotify: req.body.spotify,
-    spotifyExamples: req.body.spotifyExamples,
     youtube: req.body.youtube,
-    youtubeExamples: req.body.youtubeExamples,
     soundcloud: req.body.soundcloud,
-    soundcloudExamples: req.body.soundcloudExamples,
+    examples: req.body.examples,
     userId: req.user.id
   })
   .then(() => res.status(200).json({message: "user Profile created"}))
@@ -38,13 +35,10 @@ router.put('/update', validateSession, function(req, res){
     instagram: req.body.instagram,
     facebook: req.body.facebook,
     bandcamp: req.body.bandcamp,
-    bandcampExamples: req.body.bandcampExamples,
     spotify: req.body.spotify,
-    spotifyExamples: req.body.spotifyExamples,
     youtube: req.body.youtube,
-    youtubeExamples: req.body.youtubeExamples,
     soundcloud: req.body.soundcloud,
-    soundcloudExamples: req.body.soundcloudExamples
+    examples: req.body.examples
   },
   {where: {userId: req.user.id}})
   .then(() => res.status(200).json({message: "user Profile updated"}))
@@ -53,7 +47,18 @@ router.put('/update', validateSession, function(req, res){
 
 router.put('/adminRemove/:id', validateBandmate, function(req, res){
   Profile.update({
-    bio: "Profile has been removed by Admin."
+    bio: "Profile has been removed by Admin.",
+    stageName: null,
+    genres: null,
+    instruments: null,
+    twitter: null,
+    instagram: null,
+    facebook: null,
+    bandcamp: null,
+    spotify: null,
+    youtube: null,
+    soundcloud: null,
+    examples: null
   },
   {where: {userId: req.params.id}})
   .then(() => res.status(200).json({message: "User Profile removed"}))

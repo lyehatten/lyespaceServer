@@ -32,32 +32,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
-    bandcampExamples: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
-    },
     spotify: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    spotifyExamples: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
     },
     youtube: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    youtubeExamples: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
-    },
     soundcloud: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    soundcloudExapmles: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    exapmles: {
+      type: DataTypes.TEXT,
       allowNull: true
     }
   })
