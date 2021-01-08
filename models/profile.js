@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
-    exapmles: {
+    examples: {
       type: DataTypes.TEXT,
       allowNull: true
     }
