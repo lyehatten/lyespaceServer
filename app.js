@@ -18,7 +18,7 @@ const sequelize = require('./db');
 
 
 sequelize.sync();
-sequelize.sync({force: true})
+// sequelize.sync({force: true})
 
 app.use('/user', user);
 app.use('/profile', profile);
